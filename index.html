@@ -102,6 +102,9 @@
 
         .btn-start { background: rgba(57, 255, 20, 0.25); color: #39FF14; border-color: #39FF14; }
         .btn-pause { background: rgba(255, 255, 0, 0.2); color: #ffff00; border-color: #ffff00; }
+		/* Tambahkan ini di dalam tag <style> */
+		.btn-reset { background: rgba(255, 0, 0, 0.2); color: #ff4d4d; border-color: #ff4d4d; }
+		.glass-btn:hover { transform: scale(1.05); }
 
         /* --- BARIS C --- */
         .row-c { 
@@ -149,10 +152,11 @@
             </div>
 
             <div class="controls">
-                <input type="number" id="minutes-input" min="1" value="45">
-                <button class="glass-btn btn-start" onclick="startTimer()">START</button>
-                <button class="glass-btn btn-pause" onclick="pauseTimer()">PAUSE</button>
-            </div>
+				<input type="number" id="minutes-input" min="1" value="45">
+				<button class="glass-btn btn-start" onclick="startTimer()">START</button>
+				<button class="glass-btn btn-pause" onclick="pauseTimer()">PAUSE</button>
+				<button class="glass-btn btn-reset" onclick="resetTimer()">RESET</button>
+			</div>
         </div>
 
         <div class="row-c penabur-blue">
@@ -201,6 +205,15 @@
         }
 
         function pauseTimer() { isPaused = true; clearInterval(countdown); }
+		
+		// Tambahkan fungsi ini di dalam tag <script>
+		function resetTimer() {
+		clearInterval(countdown);
+		totalSeconds = 0;
+		isPaused = false;
+		displayTime(0);
+		speak("waktu hitung mundur asesmen sumatif, diatur ulang");
+}
 
         function displayTime(seconds) {
             const min = Math.floor(seconds / 60);
