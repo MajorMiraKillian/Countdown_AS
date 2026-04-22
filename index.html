@@ -147,19 +147,19 @@
                 clearInterval(countdown);
                 let minutes = parseInt(document.getElementById('minutes-input').value);
                 totalSeconds = (isNaN(minutes) ? 0 : minutes) * 60;
-                speak("Asesmen Sumatif jam ke nol dimulai");
+                speak("Asesmen Sumatif dimulai, ingatlah, PRESTASI ITU PENTING, JUJUR YANG PALING UTAMA");
             }
             clearInterval(countdown);
             displayTime(totalSeconds);
             countdown = setInterval(() => {
                 if (totalSeconds <= 0) {
                     clearInterval(countdown);
-                    speak("Waktu Asesmen Sumatif jam ke nol telah berakhir, kumpulkan Lembar Jawab dan Soal ke pengawas");
+                    speak("Waktu Asesmen Sumatif telah berakhir, kumpulkan Lembar Jawab dan Soal ke pengawas");
                     return;
                 }
                 totalSeconds--;
                 displayTime(totalSeconds);
-                if (totalSeconds === 300) speak("waktu tersisa 5 menit, cek kembali lembar jawab dan data diri anda");
+                if (totalSeconds === 300) speak("Waktu tersisa 5 menit, cek kembali lembar jawab dan data diri anda");
             }, 1000);
         }
 
