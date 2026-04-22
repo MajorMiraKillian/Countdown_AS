@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asesmen Sumatif AKT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { height: 100%; font-family: 'Arial', sans-serif; overflow: hidden; }
+
+        .container { display: flex; flex-direction: column; height: 100vh; }
+        .penabur-blue { background-color: #002366; color: white; }
+
+        /* Baris A */
+        .row-a { 
+            height: 20%; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            text-align: center; border-bottom: 5px solid #f1c40f; padding: 10px;
+        }
+        .row-a h2 { font-size: 1.8rem; margin-bottom: 5px; }
+        #current-date { font-size: 1.8rem; font-weight: bold; margin-bottom: 15px; }
+        .row-a p strong { font-size: 1.3rem; display: block; }
+        .row-a .alamat { font-size: 0.85rem; opacity: 0.8; line-height: 1.4; }
+
+        /* Baris B - Countdown STABIL TOTAL */
+        .row-b { 
+            height: 60%; background-color: #000000; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+        }
+        
+        /* Teknik Rahasia: Memisahkan angka ke dalam slot khusus */
+        .timer-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Chakra Petch', sans-serif;
+            font-weight: 700;
+            font-size: 400px;
+            color: #39FF14;
+            line-height: 1;
+        }
+
+        .digit-slot {
+            width: 1ch; /* Mengunci lebar tepat 1 karakter */
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .separator {
+            width: 0.5ch; /* Lebar titik dua lebih sempit */
+            display: flex;
+            justify-content: center;
+        }
+
+        .controls { display: flex; gap: 20px; align-items: center; margin-top: 20px; }
+        
+        input[type="number"] { 
+            padding: 12px; font-size: 22px; width: 110px; 
+            background: #111; border: 1px solid #333; color: #39FF14; border-radius: 8px;
+            text-align: center;
+        }
+
+        .glass-btn {
+            padding: 15px 35px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s ease;
+        }
+
+        .btn-start { background: rgba(57, 255, 20, 0.25); color: #39FF14; border-color: #39FF14; }
+        .btn-pause { background: rgba(255, 255, 0, 0.2); color: #ffff00; border-color: #ffff00; }
+
+        /* Baris C */
+        .row-c { 
+            height: 20%; 
+            display: flex; justify-content: center; align-items: center; 
+            text-align: center; border-top: 5px solid #f1c40f;
+        }
+        .slogan {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #ffffff;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.1; } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row-a penabur-blue">
+            <h2>Asesmen Sumatif Jam ke-0</h2>
+            <div id="current-date"></div>
+            <p><strong>SMAK PENABUR KOTA TANGERANG</strong></p>
+            <div class="alamat">Jalan Honoris Raya Blok J/10 Kota Modern, Tangerang - BANTEN 15117</div>
+        </div>
+
+        <div class="row-b">
+            <div class="timer-wrapper" id="timer-container">
+                <div class="digit-slot" id="m1">0</div>
+                <div class="digit-slot" id="m2">0</div>
+                <div class="separator">:</div>
+                <div class="digit-slot" id="s1">0</div>
+                <div class="digit-slot" id="s2">0</div>
+            </div>
+
+            <div class="controls">
+                <input type="number" id="minutes-input" min="1" value="60">
+                <button class="glass-btn btn-start" onclick="startTimer()">START</button>
+                <button class="glass-btn btn-pause" onclick="pauseTimer()">PAUSE</button>
+            </div>
+        </div>
+
+        <div class="row-c penabur-blue">
+            <div class="slogan">PRESTASI ITU PENTING, JUJUR YANG PALING UTAMA</div>
+        </div>
+    </div>
+
+    <script>
+        function updateDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').innerText = new Date().toLocaleDateString('id-ID', options);
+        }
+        updateDate();
+
+        let countdown;
+        let totalSeconds = 0;
+        let isPaused = false;
+        
+        function speak(text) {
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = text; msg.lang = 'id-ID';
+            window.speechSynthesis.speak(msg);
+        }
+
+        function startTimer() {
+            if (isPaused && totalSeconds > 0) {
+                isPaused = false;
+            } else {
+                clearInterval(countdown);
+                let minutes = parseInt(document.getElementById('minutes-input').value);
+                totalSeconds = (isNaN(minutes) ? 0 : minutes) * 60;
+                speak("Asesmen Sumatif dimulai");
+            }
+            clearInterval(countdown);
+            displayTime(totalSeconds);
+            countdown = setInterval(() => {
+                if (totalSeconds <= 0) {
+                    clearInterval(countdown);
+                    speak("Waktu Asesmen Sumatif telah berakhir");
+                    return;
+                }
+                totalSeconds--;
+                displayTime(totalSeconds);
+                if (totalSeconds === 300) speak("Waktu tersisa 5 menit");
+            }, 1000);
+        }
+
+        function pauseTimer() { isPaused = true; clearInterval(countdown); }
+
+        function displayTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = seconds % 60;
+            
+            // Format angka menjadi string dua digit
+            const minStr = min.toString().padStart(2, '0');
+            const secStr = sec.toString().padStart(2, '0');
+
+            // Masukkan ke slot masing-masing agar posisi titik dua tidak bergeser
+            document.getElementById('m1').innerText = minStr[0];
+            document.getElementById('m2').innerText = minStr[1];
+            document.getElementById('s1').innerText = secStr[0];
+            document.getElementById('s2').innerText = secStr[1];
+        }
+    </script>
+</body>
+</html>
