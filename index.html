@@ -195,7 +195,7 @@
             countdown = setInterval(() => {
                 if (totalSeconds <= 0) {
                     clearInterval(countdown);
-                    speak("Waktu Asesmen Sumatif telah berakhir, kumpulkan Lembar Jawab dan Soal ke pengawas");
+                    speak("Waktu Asesmen Sumatif Akhir Semester telah berakhir, kumpulkan Lembar Jawab dan Soal ke pengawas");
                     return;
                 }
                 totalSeconds--;
@@ -212,7 +212,7 @@
 		totalSeconds = 0;
 		isPaused = false;
 		displayTime(0);
-		speak("waktu hitung mundur asesmen sumatif, diatur ulang");
+		speak("waktu hitung mundur asesmen sumatif akhir semester, diatur ulang");
 }
 
         function displayTime(seconds) {
